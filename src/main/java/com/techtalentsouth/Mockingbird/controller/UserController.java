@@ -1,5 +1,6 @@
 package com.techtalentsouth.Mockingbird.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,8 +9,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.techtalentsouth.Mockingbird.model.Tweet;
+//import com.techtalentsouth.Mockingbird.model.Tweet;
+import com.techtalentsouth.Mockingbird.model.TweetDisplay;
 import com.techtalentsouth.Mockingbird.model.User;
 import com.techtalentsouth.Mockingbird.service.TweetService;
 import com.techtalentsouth.Mockingbird.service.UserService;
@@ -24,9 +27,9 @@ public class UserController {
     private TweetService tweetService;
     
     @GetMapping(value = "/users/{username}")
-    public String getUser(@PathVariable(value="username") String username, Model model) {	
+    public String getUser(@PathVariable(value="username") String username, Model model) {
         User user = userService.findByUsername(username);
-        List<Tweet> tweets = tweetService.findAllByUser(user);
+        List<TweetDisplay> tweets = tweetService.findAllByUser(user);
         model.addAttribute("tweetList", tweets);
         model.addAttribute("user", user);
         User loggedInUser = userService.getLoggedInUser();
@@ -44,12 +47,29 @@ public class UserController {
     }	
     
     @GetMapping(value = "/users")
-    public String getUsers(Model model) {
-        List<User> users = userService.findAll();
+    public String getUsers(@RequestParam(value="filter", required=false) 
+    String filter, Model model) {
+    	List<User> users = new ArrayList<User>();	
+    	User loggedInUser = userService.getLoggedInUser();
+    	List<User> usersFollowing = loggedInUser.getFollowing();
+    	List<User> usersFollowers = loggedInUser.getFollowers();
+    	if (filter.equalsIgnoreCase("followers")) {
+    	    users = usersFollowers;
+    	    model.addAttribute("filter", "followers");
+    	}
+    	else if (filter.equalsIgnoreCase("following")) {
+    	    users = usersFollowing;
+    	    model.addAttribute("filter", "following");
+    	}
+    	else {
+    	    users = userService.findAll();
+    	    model.addAttribute("filter", "all");
+    	}
+        //List<User> users = userService.findAll();
         model.addAttribute("users", users);
         SetTweetCounts(users, model);
-        User loggedInUser = userService.getLoggedInUser();
-        List<User> usersFollowing = loggedInUser.getFollowing();
+        //User loggedInUser = userService.getLoggedInUser();
+        //List<User> usersFollowing = loggedInUser.getFollowing();
         SetFollowingStatus(users, usersFollowing, model);
         return "users";
     }
@@ -71,7 +91,7 @@ public class UserController {
 	private void SetTweetCounts(List<User> users, Model model) {
         HashMap<String,Integer> tweetCounts = new HashMap<>();
         for (User user : users) {
-            List<Tweet> tweets = tweetService.findAllByUser(user);
+        	List<TweetDisplay> tweets = tweetService.findAllByUser(user);
             tweetCounts.put(user.getUsername(), tweets.size());
         }
         model.addAttribute("tweetCounts", tweetCounts);
