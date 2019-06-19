@@ -53,6 +53,9 @@ public class UserController {
     	User loggedInUser = userService.getLoggedInUser();
     	List<User> usersFollowing = loggedInUser.getFollowing();
     	List<User> usersFollowers = loggedInUser.getFollowers();
+    	if (filter == null) {
+    	    filter = "all";
+    	}
     	if (filter.equalsIgnoreCase("followers")) {
     	    users = usersFollowers;
     	    model.addAttribute("filter", "followers");
