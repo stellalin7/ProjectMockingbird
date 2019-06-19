@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head>
+    <title>Log in</title>
+    <link th:replace="fragments/bootstrap"></link>
+</head>
+<body>
+    <div class="container">
+    	<div th:replace="fragments/navbar"></div>
+        <h2>Welcome!</h2> 
+        <form th:action="@{/login}" method="post"><br/>
+            <input type="text" id="username" name="username" th:placeholder="Username" class="form-control"/> <br/>
+            <input type="password" th:placeholder="Password" id="password" name="password" class="form-control"/> <br/>
+            <div align="center" th:if="${param.error}">
+                <h4 style="color: red">Login unsuccessful.</h4>
+            </div>
+            <button class="btn btn-md btn-success btn-block" name="Submit" value="Login" type="Submit">Log in</button> 
+        </form> 
+        <a class="btn btn-block btn-primary" th:href="@{/signup}" type="submit">Sign Up for a Free Account</a> 
+        <img alt="Mockingbird Logo" height="400px" width="400px" src="https://files.slack.com/files-pri/THJAYP1GB-FKKBJSASG/mockingbirdlogo-01.png">    
+    </div>
+</body>
+</html>

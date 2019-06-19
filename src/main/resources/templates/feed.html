@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Feed</title>
+    <link th:replace="fragments/bootstrap"></link>
+</head>
+<body>
+    <div class="container">
+    	<div th:replace="fragments/navbar"></div>
+    	<div th:if="${not #lists.isEmpty(tweetList)}">
+	        <h2>Tweets</h2>
+	        <div th:each="tweet:${tweetList}">
+	            <h5>@<span th:text="${tweet.user.username}"></span>
+	            <small><span th:text="${#dates.format(tweet.createdAt, 'M/d/yy')}"></span></small></h5>
+	            <p th:utext="${tweet.message}"></p>
+	    	</div>
+    	</div>
+		<div th:if="${#lists.isEmpty(tweetList)}">
+		    <h3>No Recent Tweets</h3>
+		</div>
+		<img alt="Mockingbird Logo" height="400px" width="400px" src="https://files.slack.com/files-pri/THJAYP1GB-FKKBJSASG/mockingbirdlogo-01.png">
+    </div>
+</body>
+</html>
