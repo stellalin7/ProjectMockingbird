@@ -124,8 +124,7 @@ public class TweetService {
         	    if (link.length() > 23) {
         	        shortenedLink = link.substring(0,20) + "...";
         	    }
-	        	message = message.replace(link, "<a class=\"tag\" href=\"" + link + 
-	        	"\target=\"_blank\">" + shortenedLink + "</a>");
+	        	message = message.replace(link, "<a class=\"tag\" href=\"" + link + "\" target=\"_blank\">" + shortenedLink + "</a>");
 	            }
             tweet.setMessage(message);
         	}
