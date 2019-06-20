@@ -8,7 +8,7 @@
     <div class="container">
     	<div th:replace="fragments/navbar"></div>
 	        <div th:if="${successMessage}">
-	            <h2><span class="text-success" th:text="${successMessage}">Sign Up</span></h2>
+	            <h2><span class="text-success" th:utext="${successMessage}">Sign Up</span></h2>
         	</div>		
 	        <form th:action="@{/signup}" th:object="${user}" method="post" autocomplete="off" >
 	            <div class="form-group">
